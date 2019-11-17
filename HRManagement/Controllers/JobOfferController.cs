@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace HRManagement.Controllers
 {
-    [Route("[controller]")]
+    [Route("[controller]/[action]")]
     public class JobOfferController : Controller
     {
         private static List<JobOffer> _jobOffers = new List<JobOffer>
@@ -19,13 +19,17 @@ namespace HRManagement.Controllers
             new JobOffer {Id=5, JobTitle="Cook"}
         };
 
-        [Route("index")]
         public IActionResult Index()
         {
             return View(_jobOffers);
         }
 
         public IActionResult Details(int id)
+        {
+            return View(_jobOffers.FirstOrDefault(o => o.Id == id));
+        }
+
+        public IActionResult Edit(int id)
         {
             return View(_jobOffers.FirstOrDefault(o => o.Id == id));
         }
