@@ -2,36 +2,38 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using HRManagement.EntityFramework;
 using HRManagement.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 
 namespace HRManagement.Controllers
 {
     [Route("[controller]/[action]")]
     public class JobOfferController : Controller
     {
-        private static List<JobOffer> _jobOffers = new List<JobOffer>
+        private readonly DataContext _context;
+        
+        public JobOfferController(DataContext context)
         {
-            new JobOffer {Id=1, JobTitle="Backend Developer"},
-            new JobOffer {Id=2, JobTitle="Frontend Developer"},
-            new JobOffer {Id=3, JobTitle="Manager"},
-            new JobOffer {Id=4, JobTitle="Teacher"},
-            new JobOffer {Id=5, JobTitle="Cook"}
-        };
-
-        public IActionResult Index()
-        {
-            return View(_jobOffers);
+            //ViewBag.Companies = new SelectList(_context.Companies, "Id", "Name");
+            _context = context;
         }
 
-        public IActionResult Details(int id)
+        public async Task<IActionResult> Index()
         {
-            return View(_jobOffers.FirstOrDefault(o => o.Id == id));
+            return View(await _context.JobOffers.ToListAsync());
         }
 
-        public IActionResult Edit(int id)
+        public async Task<IActionResult> Details(int id)
         {
-            return View(_jobOffers.FirstOrDefault(o => o.Id == id));
+            return View(await _context.JobOffers.Include(x => x.CompanyName).FirstOrDefaultAsync(o => o.Id == id));
+        }
+
+        public async Task<IActionResult> Edit(int id)
+        {
+            return View(await _context.JobOffers.FirstOrDefaultAsync(o => o.Id == id));
         }
     }
 }

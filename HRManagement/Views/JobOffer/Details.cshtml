@@ -3,7 +3,12 @@
 <h2>Offer Details</h2>
 <p>Id: @Model.Id</p>
 <p>Job Title: @Model.JobTitle</p>
+<p>Company Name: @Model.CompanyName.Name</p>
+<p>Salary: @Model.Salary</p>
+<p>Contract Type: @Model.ContractType</p>
+<p>Location: @Model.Location</p>
 
 <br />
 @Html.ActionLink("Go back to Job Offers", "Index", "JobOffer")
 @Html.ActionLink("Edit", "Edit", new { id = Model.Id }, new { @class = "btn btn-primary" })
+@Html.ActionLink("Apply", "ApplyFor", "JobApplication", new { offerId = Model.Id }, new { @class = "btn btn-primary" })

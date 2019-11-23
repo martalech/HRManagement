@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Mvc.Rendering;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -13,7 +14,7 @@ namespace HRManagement.Models
         public string Description { get; set; }
         public string Location { get; set; }
         public string ContractType { get; set; }
-        public string CompanyName { get; set; }
+        public Company CompanyName { get; set; }
         public List<JobApplication> JobApplications { get; set; } = new List<JobApplication>();
     }
 }

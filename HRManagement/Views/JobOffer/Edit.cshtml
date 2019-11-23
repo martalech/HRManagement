@@ -2,6 +2,7 @@
 @{
     ViewBag.Title = "Edit";
 }
+
 <div class="row">
     <div class="col-sm-12">
         <h2>Edit Job Offer</h2>
@@ -18,6 +19,24 @@
                 @Html.LabelFor(m => m.Description)
                 @Html.TextAreaFor(m => m.Description, new { @class = "form-control", placeholder = "Enter description" })
                 @Html.ValidationMessageFor(m => m.Description, "", new { @class = "text-danger" })
+            </div>
+            <div class="form-group">
+                @Html.DropDownList("Companies", (SelectList)ViewBag.Companies, "Select company")
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(m => m.Location)
+                @Html.TextAreaFor(m => m.Location, new { @class = "form-control", placeholder = "Enter location" })
+                @Html.ValidationMessageFor(m => m.Location, "", new { @class = "text-danger" })
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(m => m.Salary)
+                @Html.TextAreaFor(m => m.Salary, new { @class = "form-control", placeholder = "Enter salary" })
+                @Html.ValidationMessageFor(m => m.Salary, "", new { @class = "text-danger" })
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(m => m.ContractType)
+                @Html.TextAreaFor(m => m.ContractType, new { @class = "form-control", placeholder = "Enter contract type" })
+                @Html.ValidationMessageFor(m => m.ContractType, "", new { @class = "text-danger" })
             </div>
             <button type="submit" class="btn btn-primary">Save</button>
         }
