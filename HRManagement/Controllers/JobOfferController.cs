@@ -28,12 +28,33 @@ namespace HRManagement.Controllers
 
         public async Task<IActionResult> Details(int id)
         {
-            return View(await _context.JobOffers.Include(x => x.CompanyName).FirstOrDefaultAsync(o => o.Id == id));
+            return View(await _context.JobOffers.Include(x => x.CompanyName).Include(x => x.JobApplications).FirstOrDefaultAsync(o => o.Id == id));
         }
 
         public async Task<IActionResult> Edit(int id)
         {
+            ViewBag.Companies = _context.Companies.ToList();
             return View(await _context.JobOffers.FirstOrDefaultAsync(o => o.Id == id));
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> Edit(JobOffer model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View();
+            }
+
+            var offer = await _context.JobOffers.FirstOrDefaultAsync(x => x.Id == model.Id);
+            offer.JobTitle = model.JobTitle;
+            offer.CompanyName = _context.Companies.FirstOrDefault(x => x.Id == model.CompanyName.Id);
+            offer.Description = model.Description;
+            offer.Salary = model.Salary;
+            offer.ContractType = model.ContractType;
+            _context.Update(offer);
+            await _context.SaveChangesAsync();
+            return RedirectToAction("Details", new { id = model.Id });
         }
     }
 }

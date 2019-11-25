@@ -7,6 +7,26 @@
 <p>Salary: @Model.Salary</p>
 <p>Contract Type: @Model.ContractType</p>
 <p>Location: @Model.Location</p>
+<p>>Applications:</p>
+
+<table class="table table-bordered">
+    @foreach (var app in Model.JobApplications)
+    {
+    <tr>
+        <th>First name</th>
+        <th>Last name</th>
+        <th>Phone number</th>
+        <th>Email address</th>
+    </tr>
+        <tr>
+            <td>@Html.DisplayFor(item => app.FirstName)</td>
+            <td>@Html.DisplayFor(item => app.LastName)</td>
+            <td>@Html.DisplayFor(item => app.PhoneNumber)</td>
+            <td>@Html.DisplayFor(item => app.EmailAddress)</td>
+        </tr>
+    }
+</table>
+
 
 <br />
 @Html.ActionLink("Go back to Job Offers", "Index", "JobOffer")
