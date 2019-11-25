@@ -37,6 +37,28 @@ namespace HRManagement.Controllers
             return View(await _context.JobOffers.FirstOrDefaultAsync(o => o.Id == id));
         }
 
+        public IActionResult Create()
+        {
+            var jobOffer = new JobOffer();
+            jobOffer.JobApplications = new List<JobApplication>();
+            ViewBag.Companies = _context.Companies.ToList();
+            return View(jobOffer);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> Create(JobOffer model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+            model.CompanyName = _context.Companies.FirstOrDefault(x => x.Id == model.CompanyName.Id);
+            await _context.JobOffers.AddAsync(model);
+            await _context.SaveChangesAsync();
+            return RedirectToAction("Index");
+        }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Edit(JobOffer model)
