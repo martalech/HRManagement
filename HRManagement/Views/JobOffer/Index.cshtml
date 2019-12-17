@@ -4,11 +4,24 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
+<div class="col-12 col-md-4 d-flex align-items-center py-2">
+    <h3 class="font-weight-bold mb-0">
+        Job Offers list
+    </h3>
+    <div>
+        <span class="badge badge-pill badge-primary align-top">
+            @Model.Count()
+        </span>
+    </div>
+</div>
 <ul>
     @foreach(var offer in Model.OrderBy(o => o.JobTitle))
     {
         <li>@Html.ActionLink(offer.JobTitle, "Details", new { id = offer.Id })</li>
     }
 </ul>
-<li>@Html.ActionLink("Create new offer", "Create", "JobOffer")</li>
+<button class="btn btn-rounded btn-outline-primary" data-toggle="modal"
+        onclick="location.href='@Url.Action("Create", "JobOffer")'" >
+    <i class="fade fa-plus pr-3"></i>
+    Add new Job Offer
+</button>

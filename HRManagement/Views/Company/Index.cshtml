@@ -1,0 +1,12 @@
+﻿@model  List<Company>
+@{
+    ViewData["Title"] = "Index";
+}
+
+<ul>
+    @foreach (var company in Model.OrderBy(c => c.Name))
+    {
+        <li>@Html.ActionLink(company.Name, "Details", new { id = company.Id })</li>
+    }
+</ul>
+<li>@Html.ActionLink("Create new offer", "Create", "Company")</li>

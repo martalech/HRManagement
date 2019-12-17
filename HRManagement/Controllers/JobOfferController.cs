@@ -17,13 +17,12 @@ namespace HRManagement.Controllers
         
         public JobOfferController(DataContext context)
         {
-            //ViewBag.Companies = new SelectList(_context.Companies, "Id", "Name");
             _context = context;
         }
 
         public async Task<IActionResult> Index()
         {
-            return View(await _context.JobOffers.ToListAsync());
+            return View(await _context.JobOffers.ToListAsync().ConfigureAwait(false));
         }
 
         public async Task<IActionResult> Details(int id)
@@ -34,7 +33,7 @@ namespace HRManagement.Controllers
         public async Task<IActionResult> Edit(int id)
         {
             ViewBag.Companies = _context.Companies.ToList();
-            return View(await _context.JobOffers.FirstOrDefaultAsync(o => o.Id == id));
+            return View(await _context.JobOffers.FirstOrDefaultAsync(o => o.Id == id).ConfigureAwait(false));
         }
 
         public IActionResult Create()
@@ -49,11 +48,28 @@ namespace HRManagement.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Create(JobOffer model)
         {
+            model.CompanyName = _context.Companies.FirstOrDefault(x => x.Id == model.CompanyName.Id);
+            ViewBag.Companies = _context.Companies.ToList();
+            if (string.IsNullOrWhiteSpace(model.JobTitle))
+            {
+                ModelState.AddModelError("JobTitle", "Job title cannot be empty");
+            }
+            if (string.IsNullOrWhiteSpace(model.Location))
+            {
+                ModelState.AddModelError("Location", "Job location cannot be empty");
+            }
+            if (string.IsNullOrWhiteSpace(model.ContractType))
+            {
+                ModelState.AddModelError("ContractType", "Job location cannot be empty");
+            }
             if (!ModelState.IsValid)
             {
                 return View(model);
             }
-            model.CompanyName = _context.Companies.FirstOrDefault(x => x.Id == model.CompanyName.Id);
+            string phoneNrRegex = "[0 - 9] + (\\.[0-9] [0-9]?)?";
+            string emailRegex = @"^([a-zA-Z0-9_\-\.]+)@((\[[0-9]{1,3}" +
+                                        @"\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([a-zA-Z0-9\-]+\" +
+                                           @".)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$";
             await _context.JobOffers.AddAsync(model);
             await _context.SaveChangesAsync();
             return RedirectToAction("Index");
@@ -77,6 +93,21 @@ namespace HRManagement.Controllers
             _context.Update(offer);
             await _context.SaveChangesAsync();
             return RedirectToAction("Details", new { id = model.Id });
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> Delete(int? idd)
+        {
+            if (idd == null)
+            {
+                return BadRequest($"id should not be null");
+            }
+            var jobapps = await _context.JobApplications.ToListAsync();
+            jobapps.RemoveAll(x => x.OfferId == idd);
+            _context.JobOffers.Remove(new JobOffer() { Id = idd.Value });
+            await _context.SaveChangesAsync();
+            return RedirectToAction("Index");
         }
     }
 }
