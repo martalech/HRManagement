@@ -15,7 +15,6 @@ namespace HRManagement.Controllers
 
         public CompanyController(DataContext context)
         {
-            //ViewBag.Companies = new SelectList(_context.Companies, "Id", "Name");
             _context = context;
         }
 

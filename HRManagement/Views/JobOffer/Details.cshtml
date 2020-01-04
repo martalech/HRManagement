@@ -1,13 +1,6 @@
 ﻿@model JobOffer
 
 <h2>Offer Details</h2>
-@*<p>Id: @Model.Id</p>
-<p>Job Title: @Model.JobTitle</p>
-<p>Company Name: @Model.CompanyName.Name</p>
-<p>Salary: @Model.Salary</p>
-<p>Contract Type: @Model.ContractType</p>
-<p>Location: @Model.Location</p>
-<p>>Applications:</p>*@
 
 <div class="panel panel-default">
     <div class="panel-heading">
@@ -78,21 +71,8 @@
     }
 </table>
 
+@Html.ActionLink("Go back to Job Offers", "Index", "JobOffer", new { id = Model.Id }, new { @class = "btn btn-primary" })
 
-@*<br />*@
-@Html.ActionLink("Go back to Job Offers", "Index", "JobOffer")
-@*<a asp-action="Edit" asp-route-id="@Model.Id">
-    <button class="btn btn-rounded btn-primary mx-2">
-        <i class="fas fa-edit pr-2"></i>
-        Edit
-    </button>
-</a>*@
-@*<button class="btn btn-rounded btn-danger mx-2"
-        data-toggle="modal"
-        data-target="#confirm-delete">
-    <i class="fas fa-trash-alt pr-2"></i>
-    Delete
-</button>*@
 <div class="modal fade" id="confirm-delete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -123,10 +103,5 @@
         </div>
     </div>
 </div>
-@*@using (Html.BeginForm("Delete", "JobOffer", new { idd = Model.Id }, FormMethod.Post, null, new { style = "display:inline;" }))
-    {
-        @Html.AntiForgeryToken()
-        <button type="submit" class="btn btn-danger">Delete</button>
-    }*@
-@*@Html.ActionLink("Edit", "Edit", new { id = Model.Id }, new { @class = "btn btn-primary" })*@
+
 @Html.ActionLink("Apply", "ApplyFor", "JobApplication", new { offerId = Model.Id }, new { @class = "btn btn-primary" })

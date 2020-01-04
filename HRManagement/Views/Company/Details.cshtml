@@ -5,5 +5,5 @@
 <p>Name: @Model.Name</p>
 
 <br />
-@Html.ActionLink("Go back to Job Offers", "Index", "Company")
+@Html.ActionLink("Go back to Companies", "Index", "Company", new { id = Model.Id }, new { @class = "btn btn-primary" })
 @Html.ActionLink("Edit", "Edit", new { id = Model.Id }, new { @class = "btn btn-primary" })

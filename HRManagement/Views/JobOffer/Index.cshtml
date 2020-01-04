@@ -8,20 +8,75 @@
     <h3 class="font-weight-bold mb-0">
         Job Offers list
     </h3>
-    <div>
-        <span class="badge badge-pill badge-primary align-top">
-            @Model.Count()
-        </span>
-    </div>
 </div>
-<ul>
-    @foreach(var offer in Model.OrderBy(o => o.JobTitle))
+
+<div id="updatePanel">
+
+</div>
+
+@*<ul>
+    @foreach (var offer in Model.OrderBy(o => o.JobTitle))
     {
         <li>@Html.ActionLink(offer.JobTitle, "Details", new { id = offer.Id })</li>
     }
-</ul>
+</ul>*@
+
+@section Scripts{
+        <script>
+            var currentPage = 1;
+            $(document).ready(function () {
+                fetchData(1);
+            });
+            function fetchData(pageNo) {
+                currentPage = pageNo;
+                var $loading = "<div class='loading'>Please wait...</div>";
+                $('#updatePanel').prepend($loading);
+                $.ajax({
+                    url: '/JobOffer/GetJobOffers',
+                    type: 'GET',
+                    data: { pageNo: pageNo },
+                    dataType: 'json',
+                    success: function (data) {
+                        console.log(data);
+                        var $table = $('<table/>').addClass('table table-responsive table-striped table-bordered');
+                        var $header = $('<thead/>').html('<tr><th style="background-color: Yellow;color: blue">JobTitle</th>');
+                        $table.append($header);
+                        $.each(data.jobOffers, function (i, job) {
+                            var $row = $('<tr/>');
+                            console.log(job.jobTitle)
+                            console.log(job.id)
+                            $row.append($('<td><a href="/JobOffer/Details?id='+job.id+'">'+job.jobTitle+'</a></td>'));
+                            $table.append($row);
+                        });
+
+                        var totalPage = parseInt(data.totalPage);
+                        var $footer = $('<tr/>');
+                        var $footerTD = $('<td/>').attr('colspan', 4).addClass('footerContent');
+
+                        if (totalPage > 0) {
+                            for (var i = 1; i <= totalPage; i++) {
+                                var $page = $('<span/>').addClass((i == currentPage) ? "current" : "");
+                                $page.html((i == currentPage) ? i : "<button onclick='fetchData(" + i + ");'>" + i + "</button>");
+                                $footerTD.append($page);
+                            }
+                            $footer.append($footerTD);
+                        }
+                        $table.append($footer);
+
+                        $('#updatePanel').html($table);
+                    },
+                    error: function () {
+                        alert('Error! Please try again.');
+                    }
+                }).done(function () {
+
+                });
+            }
+        </script>
+    }
+
 <button class="btn btn-rounded btn-outline-primary" data-toggle="modal"
-        onclick="location.href='@Url.Action("Create", "JobOffer")'" >
+        onclick="location.href='@Url.Action("Create", "JobOffer")'">
     <i class="fade fa-plus pr-3"></i>
     Add new Job Offer
 </button>

@@ -36,6 +36,26 @@ namespace HRManagement.Controllers
             return View(await _context.JobOffers.FirstOrDefaultAsync(o => o.Id == id).ConfigureAwait(false));
         }
 
+        [HttpGet]
+        public PagingViewModel GetJobOffers(int pageNo = 1, int pageSize = 1)
+        {
+            int totalPage, totalRecord;
+
+            totalRecord = _context.JobOffers.Count();
+            totalPage = (totalRecord / pageSize) + ((totalRecord % pageSize) > 0 ? 1 : 0);
+            var record = (from u in _context.JobOffers
+                          orderby u.JobTitle
+                          select u).Skip((pageNo - 1) * pageSize).Take(pageSize).ToList();
+
+            PagingViewModel empData = new PagingViewModel
+            {
+                JobOffers = record,
+                TotalPage = totalPage
+            };
+
+            return empData;
+        }
+
         public IActionResult Create()
         {
             var jobOffer = new JobOffer();
