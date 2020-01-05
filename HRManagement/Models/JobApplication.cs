@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace HRManagement.Models
 {
+    /// <summary>
+    /// Model for job application
+    /// </summary>
     public class JobApplication
     {
 

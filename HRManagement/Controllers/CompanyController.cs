@@ -9,40 +9,79 @@ using HRManagement.Models;
 
 namespace HRManagement.Controllers
 {
+    /// <summary>
+    /// Company controller
+    /// </summary>
+    [ApiController]
+    [Route("[controller]/[action]")]
     public class CompanyController : Controller
     {
+        /// <summary>
+        /// Data context for company controller
+        /// </summary>
         private readonly DataContext _context;
 
+        /// <summary>
+        /// Company controller's constructor
+        /// </summary>
+        /// <param name="context">Data context for constructor</param>
         public CompanyController(DataContext context)
         {
             _context = context;
         }
 
+        /// <summary>
+        /// Main view for companies
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
         public async Task<IActionResult> Index()
         {
             return View(await _context.Companies.ToListAsync().ConfigureAwait(false));
         }
 
+        /// <summary>
+        /// Detail view for company
+        /// </summary>
+        /// <param name="id">Company's id</param>
+        /// <returns></returns>
+        [HttpGet]
         public async Task<IActionResult> Details(int id)
         {
             return View(await _context.Companies.FirstOrDefaultAsync(o => o.Id == id));
         }
 
+        /// <summary>
+        /// Edit view for company
+        /// </summary>
+        /// <param name="id">Company's id</param>
+        /// <returns></returns>
+        [HttpGet]
         public async Task<IActionResult> Edit(int id)
         {
             ViewBag.Companies = _context.Companies.ToList();
             return View(await _context.Companies.FirstOrDefaultAsync(o => o.Id == id).ConfigureAwait(false));
         }
 
+        /// <summary>
+        /// View for creating new company
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
         public IActionResult Create()
         {
             var company = new Company();
             return View(company);
         }
 
+        /// <summary>
+        /// Adds created company if valid
+        /// </summary>
+        /// <param name="model">Created company model</param>
+        /// <returns></returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create(Company model)
+        public async Task<ActionResult> Create([FromForm]Company model)
         {
             if (!ModelState.IsValid)
             {
@@ -53,9 +92,14 @@ namespace HRManagement.Controllers
             return RedirectToAction("Index");
         }
 
+        /// <summary>
+        /// Edit company if valid
+        /// </summary>
+        /// <param name="model">Edited company model</param>
+        /// <returns></returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit(Company model)
+        public async Task<ActionResult> Edit([FromForm]Company model)
         {
             if (!ModelState.IsValid)
             {

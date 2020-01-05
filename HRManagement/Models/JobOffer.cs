@@ -7,6 +7,9 @@ using System.Threading.Tasks;
 
 namespace HRManagement.Models
 {
+    /// <summary>
+    /// Model for job offer
+    /// </summary>
     public class JobOffer
     {
         [DatabaseGeneratedAttribute(DatabaseGeneratedOption.Identity)]

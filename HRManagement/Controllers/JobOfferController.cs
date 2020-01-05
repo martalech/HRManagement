@@ -20,16 +20,21 @@ namespace HRManagement.Controllers
             _context = context;
         }
 
+        [HttpGet]
         public async Task<IActionResult> Index()
         {
             return View(await _context.JobOffers.ToListAsync().ConfigureAwait(false));
         }
 
+
+        [HttpGet]
         public async Task<IActionResult> Details(int id)
         {
             return View(await _context.JobOffers.Include(x => x.CompanyName).Include(x => x.JobApplications).FirstOrDefaultAsync(o => o.Id == id));
         }
 
+
+        [HttpGet]
         public async Task<IActionResult> Edit(int id)
         {
             ViewBag.Companies = _context.Companies.ToList();
@@ -56,6 +61,8 @@ namespace HRManagement.Controllers
             return empData;
         }
 
+
+        [HttpGet]
         public IActionResult Create()
         {
             var jobOffer = new JobOffer();
@@ -86,10 +93,7 @@ namespace HRManagement.Controllers
             {
                 return View(model);
             }
-            string phoneNrRegex = "[0 - 9] + (\\.[0-9] [0-9]?)?";
-            string emailRegex = @"^([a-zA-Z0-9_\-\.]+)@((\[[0-9]{1,3}" +
-                                        @"\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([a-zA-Z0-9\-]+\" +
-                                           @".)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$";
+
             await _context.JobOffers.AddAsync(model);
             await _context.SaveChangesAsync();
             return RedirectToAction("Index");
