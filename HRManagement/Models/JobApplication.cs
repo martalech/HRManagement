@@ -13,7 +13,7 @@ namespace HRManagement.Models
     {
 
         public int Id { get; set; }
-        public int OfferId { get; set; }
+        public virtual int JobOfferId { get; set; }
         [Required]
         public string FirstName { get; set; }
         [Required]

@@ -76,6 +76,12 @@ namespace HRManagement
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
 
+            using (var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
+            {
+                var context = serviceScope.ServiceProvider.GetService<DataContext>();
+                context.Database.Migrate();
+            }
+
             app.UseSwagger();
             app.UseSwaggerUI(c =>
             {

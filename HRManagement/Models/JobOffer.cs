@@ -19,7 +19,8 @@ namespace HRManagement.Models
         public string Description { get; set; }
         public string Location { get; set; }
         public string ContractType { get; set; }
-        public Company CompanyName { get; set; }
-        public List<JobApplication> JobApplications { get; set; } = new List<JobApplication>();
+        public virtual int CompanyNameId { get; set; }
+        public virtual Company CompanyName { get; set; }
+        public virtual List<JobApplication> JobApplications { get; set; } = new List<JobApplication>();
     }
 }

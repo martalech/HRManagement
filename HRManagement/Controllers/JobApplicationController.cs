@@ -39,7 +39,7 @@ namespace HRManagement.Controllers
         public IActionResult ApplyFor(int offerId)
         {
             var jobApp = new JobApplication();
-            jobApp.OfferId = offerId;
+            jobApp.JobOfferId = offerId;
             return View(jobApp);
         }
 
@@ -63,12 +63,12 @@ namespace HRManagement.Controllers
             newJobApp.FirstName = jobApplication.FirstName;
             newJobApp.LastName = jobApplication.LastName;
             newJobApp.PhoneNumber = jobApplication.PhoneNumber;
-            newJobApp.OfferId = jobApplication.OfferId;
-            var offer = _context.JobOffers.Include(x => x.JobApplications).FirstOrDefault(x => x.Id == jobApplication.OfferId);
+            newJobApp.JobOfferId = jobApplication.JobOfferId;
+            var offer = _context.JobOffers.Include(x => x.JobApplications).FirstOrDefault(x => x.Id == jobApplication.JobOfferId);
             offer.JobApplications.Add(newJobApp);
             await _context.JobApplications.AddAsync(newJobApp);
             await _context.SaveChangesAsync();
-            return RedirectToAction("Details", "JobOffer", new { id = newJobApp.OfferId });
+            return RedirectToAction("Details", "JobOffer", new { id = newJobApp.JobOfferId });
         }
     }   
 }

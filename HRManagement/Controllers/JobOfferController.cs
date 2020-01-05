@@ -76,6 +76,7 @@ namespace HRManagement.Controllers
         public async Task<ActionResult> Create(JobOffer model)
         {
             model.CompanyName = _context.Companies.FirstOrDefault(x => x.Id == model.CompanyName.Id);
+            model.CompanyNameId = model.CompanyName.Id;
             ViewBag.Companies = _context.Companies.ToList();
             if (string.IsNullOrWhiteSpace(model.JobTitle))
             {
@@ -111,6 +112,7 @@ namespace HRManagement.Controllers
             var offer = await _context.JobOffers.FirstOrDefaultAsync(x => x.Id == model.Id);
             offer.JobTitle = model.JobTitle;
             offer.CompanyName = _context.Companies.FirstOrDefault(x => x.Id == model.CompanyName.Id);
+            offer.CompanyNameId = offer.CompanyName.Id;
             offer.Description = model.Description;
             offer.Salary = model.Salary;
             offer.ContractType = model.ContractType;
@@ -128,7 +130,7 @@ namespace HRManagement.Controllers
                 return BadRequest($"id should not be null");
             }
             var jobapps = await _context.JobApplications.ToListAsync();
-            jobapps.RemoveAll(x => x.OfferId == idd);
+            jobapps.RemoveAll(x => x.JobOfferId == idd);
             _context.JobOffers.Remove(new JobOffer() { Id = idd.Value });
             await _context.SaveChangesAsync();
             return RedirectToAction("Index");

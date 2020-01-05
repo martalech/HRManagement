@@ -7,10 +7,10 @@
         <h2>Edit Job Offer</h2>
         @using (Html.BeginForm("ApplyFor"))
         {
-            @Html.HiddenFor(m => m.OfferId, new { @Value = Model.OfferId })
+            @Html.HiddenFor(m => m.JobOfferId, new { @Value = Model.JobOfferId })
             @Html.AntiForgeryToken()
             @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-            <p>Applyfor job offer nr: @Model.OfferId</p>
+            <p>Applyfor job offer nr: @Model.JobOfferId</p>
             <div class="form-group">
                 @Html.LabelFor(m => m.FirstName)
                 @Html.TextAreaFor(m => m.FirstName, new { @class = "form-control", placeholder = "Enter first name" })
