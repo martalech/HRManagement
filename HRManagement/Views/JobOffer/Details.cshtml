@@ -31,7 +31,7 @@
                 <label>Salary:</label>
                 <div class="content">@Model.Salary  (PLN)</div>
 
-                <label>Created:</label>
+                <label>Contract type:</label>
                 <div class="content">@Model.ContractType</div>
 
                 <div class="pt-4">
@@ -54,14 +54,14 @@
 </div>
 
 <table class="table table-bordered">
+    <tr>
+        <th>First name</th>
+        <th>Last name</th>
+        <th>Phone number</th>
+        <th>Email address</th>
+    </tr>
     @foreach (var app in Model.JobApplications)
     {
-        <tr>
-            <th>First name</th>
-            <th>Last name</th>
-            <th>Phone number</th>
-            <th>Email address</th>
-        </tr>
         <tr>
             <td>@Html.DisplayFor(item => app.FirstName)</td>
             <td>@Html.DisplayFor(item => app.LastName)</td>
@@ -91,7 +91,7 @@
                     <i class="fas fa-chevron-left pr-2"></i>
                     Cancel
                 </button>
-                @using (Html.BeginForm("Delete", "JobOffer", new { Model.Id }, FormMethod.Post, null, new { style = "display:inline;" }))
+                @using (Html.BeginForm("Delete", "JobOffer", new { idd = Model.Id }, FormMethod.Post, null, new { style = "display:inline;" }))
                 {
                     @Html.AntiForgeryToken()
                     <button type="submit" class="btn btn-rounded btn-danger">

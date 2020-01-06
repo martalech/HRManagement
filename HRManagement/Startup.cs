@@ -41,6 +41,7 @@ namespace HRManagement
             services.AddDbContext<DataContext>(options => options.UseSqlServer(connection));
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            services.AddSingleton(Configuration);
 
             services.AddSwaggerGen(c =>
             {

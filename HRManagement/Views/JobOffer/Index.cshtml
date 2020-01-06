@@ -14,13 +14,6 @@
 
 </div>
 
-@*<ul>
-    @foreach (var offer in Model.OrderBy(o => o.JobTitle))
-    {
-        <li>@Html.ActionLink(offer.JobTitle, "Details", new { id = offer.Id })</li>
-    }
-</ul>*@
-
 @section Scripts{
         <script>
             var currentPage = 1;

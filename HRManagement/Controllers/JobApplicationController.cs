@@ -7,6 +7,9 @@ using HRManagement.EntityFramework;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using SendGrid;
+using SendGrid.Helpers.Mail;
+using Microsoft.Extensions.Configuration;
 
 namespace HRManagement.Controllers
 {
@@ -20,13 +23,15 @@ namespace HRManagement.Controllers
         /// Data context for job application
         /// </summary>
         DataContext _context;
+        private string apiKey;
 
         /// <summary>
         /// Creates new job application controller
         /// </summary>
         /// <param name="context">Data context</param>
-        public JobApplicationController(DataContext context)
+        public JobApplicationController(DataContext context, IConfiguration config)
         {
+            apiKey = config.GetSection("SengridApiKey").Value;
             _context = context;
         }
 
@@ -68,6 +73,16 @@ namespace HRManagement.Controllers
             offer.JobApplications.Add(newJobApp);
             await _context.JobApplications.AddAsync(newJobApp);
             await _context.SaveChangesAsync();
+
+            var msg = new SendGridMessage();
+            msg.SetFrom(new EmailAddress("test@example.com", "Super Company Team"));
+            msg.AddTo(new EmailAddress(newJobApp.EmailAddress, newJobApp.FirstName + " " + newJobApp.LastName));
+            msg.SetSubject("Application sent, confirmation");
+            msg.AddContent(MimeType.Text, "Hello, your application was sent correctly");
+            //var apiKey = Configuration["DatabaseConnectionString"];
+            var client = new SendGridClient(apiKey);
+            var resposne = await client.SendEmailAsync(msg);
+
             return RedirectToAction("Details", "JobOffer", new { id = newJobApp.JobOfferId });
         }
     }   
