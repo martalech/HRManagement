@@ -3,10 +3,25 @@
     ViewData["Title"] = "Index";
 }
 
-<ul>
+<div class="col-12 col-md-4 d-flex align-items-center py-2">
+    <h3 class="font-weight-bold mb-0">
+        Companies list
+    </h3>
+</div>
+
+<table class="table table-bordered">
+    <tr>
+        <th>
+            Company Name
+        </th>
+    </tr>
     @foreach (var company in Model.OrderBy(c => c.Name))
     {
-        <li>@Html.ActionLink(company.Name, "Details", new { id = company.Id })</li>
+        <tr>
+            <td>
+                @Html.ActionLink(company.Name, "Details", new { id = company.Id })
+            </td>
+        </tr>
     }
-</ul>
+</table>
 @Html.ActionLink("Add new company", "Create", "Company", new { }, new { @class = "btn btn-primary" })

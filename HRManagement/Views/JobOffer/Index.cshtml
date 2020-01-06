@@ -31,8 +31,8 @@
                     dataType: 'json',
                     success: function (data) {
                         console.log(data);
-                        var $table = $('<table/>').addClass('table table-responsive table-striped table-bordered');
-                        var $header = $('<thead/>').html('<tr><th style="background-color: Yellow;color: blue">JobTitle</th>');
+                        var $table = $('<table/>').addClass('table table-striped table-bordered');
+                        var $header = $('<thead/>').html('<tr><th>JobTitle</th>');
                         $table.append($header);
                         $.each(data.jobOffers, function (i, job) {
                             var $row = $('<tr/>');
@@ -68,7 +68,7 @@
         </script>
     }
 
-<button class="btn btn-rounded btn-outline-primary" data-toggle="modal"
+<button class="btn btn-rounded btn-primary mx-2" data-toggle="modal"
         onclick="location.href='@Url.Action("Create", "JobOffer")'">
     <i class="fade fa-plus pr-3"></i>
     Add new Job Offer

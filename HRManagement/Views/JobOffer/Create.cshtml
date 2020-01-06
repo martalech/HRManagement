@@ -73,7 +73,7 @@
                 @Html.EditorFor(m => m.ContractType, new { htmlAttributes = new { @class = "form-control" } })
                 @Html.ValidationMessageFor(m => m.ContractType, "", new { @class = "text-danger" })
             </div>
-            <button onclick="fetchData()">Zapisz</button>
+            <button onclick="fetchData()" class="btn btn-rounded btn-primary mx-2">Create</button>
         }
     </div>
 </div>
