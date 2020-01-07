@@ -4,25 +4,10 @@ using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
 using System.IO;
 using System.Threading;
-//using System.Web.Mvc;
-//using Microsoft.VisualStudio.TestTools.UnitTesting;
-//using WebApplication3.Controllers;
-//using Microsoft.Extensions.DependencyInjection;
-//using Microsoft.EntityFrameworkCore.Infrastructure;
+using System.Diagnostics;
 
 namespace UnitTests
 {
-    //public class UnitTest2
-    //{
-    //    private readonly IServiceProvider serviceProvider;
-    //    public UnitTest2()
-    //    {
-    //        //var services = new ServiceCollection();
-    //        //var connection = Configuration["Server=(localdb)\\mssqllocaldb;Database=HRDatabase;Trusted_Connection=True;"];
-    //        //services.AddDbContext<DataContext>(options => options.UseSqlServer(connection));
-    //        //services.AddEntityFrameworkSqlServer().AddDbContext<ApplicationDbContext>(o => o.UseInMemoryDatabase());
-    //    }
-    //}
     public class UnitTest1 : IDisposable
     {
         private readonly IWebDriver driver;
@@ -36,7 +21,7 @@ namespace UnitTests
             var dir = Directory.GetCurrentDirectory();
             driver = new ChromeDriver(dir);
         }
-        public static bool ApplyForAJob(IWebDriver driver, string firstName, string lastName, string phoneNumber, string cvUrl, string emailAddress)
+        public static bool ApplyForAJob(IWebDriver driver, string firstName, string lastName, string phoneNumber, string cvUrl, string emailElddress)
         {
             while (true)
             {
@@ -44,25 +29,25 @@ namespace UnitTests
                 {
                     var apply = driver.FindElement(By.XPath("/html/body/div/main/a[2]"));
                     apply.Click();
-                    var fName = driver.FindElement(By.XPath("/html/body/div/main/div/div/form/div[1]/textarea"));
-                    fName.Click();
-                    fName.SendKeys(firstName);
+                    var fristNameEl = driver.FindElement(By.XPath("/html/body/div/main/div/div/form/div[1]/textarea"));
+                    fristNameEl.Click();
+                    fristNameEl.SendKeys(firstName);
                     Thread.Sleep(1000);
-                    var lName = driver.FindElement(By.XPath("/html/body/div/main/div/div/form/div[2]/textarea"));
-                    lName.Click();
-                    lName.SendKeys(lastName);
+                    var lastNameEl = driver.FindElement(By.XPath("/html/body/div/main/div/div/form/div[2]/textarea"));
+                    lastNameEl.Click();
+                    lastNameEl.SendKeys(lastName);
                     Thread.Sleep(1000);
-                    var pN = driver.FindElement(By.XPath("/html/body/div/main/div/div/form/div[3]/textarea"));
-                    pN.Click();
-                    pN.SendKeys(phoneNumber);
+                    var phoneNumberEl = driver.FindElement(By.XPath("/html/body/div/main/div/div/form/div[3]/textarea"));
+                    phoneNumberEl.Click();
+                    phoneNumberEl.SendKeys(phoneNumber);
                     Thread.Sleep(1000);
-                    var cvU = driver.FindElement(By.XPath("/html/body/div/main/div/div/form/div[5]/textarea"));
-                    cvU.Click();
-                    cvU.SendKeys(cvUrl);
+                    var cvUrlEl = driver.FindElement(By.XPath("/html/body/div/main/div/div/form/div[5]/textarea"));
+                    cvUrlEl.Click();
+                    cvUrlEl.SendKeys(cvUrl);
                     Thread.Sleep(1000);
-                    var em = driver.FindElement(By.XPath("/html/body/div/main/div/div/form/div[6]/textarea"));
-                    em.Click();
-                    em.SendKeys(emailAddress);
+                    var emailEl = driver.FindElement(By.XPath("/html/body/div/main/div/div/form/div[6]/textarea"));
+                    emailEl.Click();
+                    emailEl.SendKeys(emailElddress);
                     Thread.Sleep(1000);
                     var save = driver.FindElement(By.XPath("/html/body/div/main/div/div/form/button"));
                     save.Click();
@@ -70,12 +55,11 @@ namespace UnitTests
                 }
                 catch
                 {
-                    //return false;
                 }
             }
             return false;
         }
-        public static bool SprawdzamyDane(IWebDriver driver, string jobTitle, string company, string location, string salary, string description)
+        public static bool CheckData(IWebDriver driver, string jobTitle, string company, string location, string salary, string description)
         {
             var jT = driver.FindElement(By.XPath("/html/body/div/main/div[1]/div[2]/div/div/h4"));
             if (jT.Text != jobTitle) return false;
@@ -93,13 +77,12 @@ namespace UnitTests
         public void ApplyForAJobTest()
         {
             driver.Navigate().GoToUrl("https://localhost:5001");
-            //dane
-            var jobTitleT = "dentist";
-            var fName = "Ela";
-            var lName = "Kowal";
-            var phoneN = "736284732";
-            var cvUrl = "https://www.elo.pl";
-            var emailA = "aak@op.pl";
+            var jobTitleT = "C# Developer";
+            var fristNameEl = "Jan";
+            var lastNameEl = "Kowalski";
+            var phoneN = "278987456";
+            var cvUrlEl = "https://www.example.pl";
+            var emailEl = "cutiepiemarta@gmail.com";
             while (true)
             {
                 try
@@ -110,19 +93,18 @@ namespace UnitTests
                 }
                 catch
                 {
-
                 }
             }
             Thread.Sleep(1000);
-            int superFlaga = 0;
-            //przegladamy strony z ofertami
+            int flag = 0;
+
             while (true)
             {
                 try
                 {
-                    var pasek = driver.FindElement(By.XPath("/html/body/div/main/div/table/tr[2]/td"));
-                    var spany = pasek.FindElements(By.TagName("span"));
-                    for (int i = 0; i < spany.Count; i++)
+                    var bar = driver.FindElement(By.XPath("/html/body/div/main/div/table/tr[2]/td"));
+                    var spans = bar.FindElements(By.TagName("span"));
+                    for (int i = 0; i < spans.Count; i++)
                     {
                         while (true)
                         {
@@ -132,46 +114,38 @@ namespace UnitTests
                                 if (jobT.Text == jobTitleT)
                                 {
                                     jobT.Click();
-                                    //aplikujemy
 
-                                    var apl = ApplyForAJob(driver, fName, lName, phoneN, cvUrl, emailA);
+                                    var apl = ApplyForAJob(driver, fristNameEl, lastNameEl, phoneN, cvUrlEl, emailEl);
 
-                                    if (apl) superFlaga = 1;
+                                    if (apl) flag = 1;
 
-                                    //else superFlaga = 2;
-                                    ////wracamy do wszsytkich jobOffers
-                                    //if (superFlaga != 1) driver.FindElement(By.XPath("/html/body/div/main/a")).Click();
                                     break;
                                 }
                                 else
                                 {
-                                    pasek = driver.FindElement(By.XPath("/html/body/div/main/div/table/tr[2]/td"));
-                                    spany = pasek.FindElements(By.TagName("span"));
-                                    var nastepny = spany[(i + 1) % spany.Count];
-                                    if (i != spany.Count - 1) nastepny.Click();
+                                    bar = driver.FindElement(By.XPath("/html/body/div/main/div/table/tr[2]/td"));
+                                    spans = bar.FindElements(By.TagName("span"));
+                                    var next = spans[(i + 1) % spans.Count];
+                                    if (i != spans.Count - 1) next.Click();
 
                                 }
                             }
                             catch
                             {
-
                             }
-                            //if (superFlaga == 2)
-                            //    break;
                         }
-                        if (superFlaga == 1)
+                        if (flag == 1)
                             break;
                     }
-                    if (superFlaga == 1)
+                    if (flag == 1)
                         break;
                 }
                 catch
                 {
-
                 }
             }
-            bool superFlaga2 = false;
-            //przegladamy tabele czy jest nasz tr
+            bool flag2 = false;
+            
             while (true)
             {
                 try
@@ -180,23 +154,22 @@ namespace UnitTests
                     var trs = tbody.FindElements(By.TagName("tr"));
                     for (int i = 1; i < trs.Count; i++)
                     {
-                        if (SprawdzTr(driver, i, fName, lName, phoneN, emailA))
+                        if (CheckTr(driver, i, fristNameEl, lastNameEl, phoneN, emailEl))
                         {
-                            superFlaga2 = true;
+                            flag2 = true;
                             break;
                         }
                     }
                 }
                 catch
                 {
-
                 }
-                if (superFlaga2) break;
+                if (flag2) break;
             }
 
             Thread.Sleep(5000);
         }
-        public static bool SprawdzTr(IWebDriver driver, int i, string firstName, string lastName, string phoneNumber, string emailAddress)
+        public static bool CheckTr(IWebDriver driver, int i, string firstName, string lastName, string phoneNumber, string emailElddress)
         {
             var tbody = driver.FindElement(By.XPath("/html/body/div/main/table/tbody"));
             var trs = tbody.FindElements(By.TagName("tr"));
@@ -206,15 +179,15 @@ namespace UnitTests
             if (tds[0].Text != firstName) return false;
             if (tds[1].Text != lastName) return false;
             if (tds[2].Text != phoneNumber) return false;
-            if (tds[3].Text != emailAddress) return false;
+            if (tds[3].Text != emailElddress) return false;
             return true;
         }
         [Fact]
-        public void AddNewCompanyTest()
+        public void CompanyTest()
         {
             driver.Navigate().GoToUrl("https://localhost:5001");
-            //dane
-            var name = "Apple";
+            
+            var name = "Super Company";
             while (true)
             {
                 try
@@ -225,7 +198,6 @@ namespace UnitTests
                 }
                 catch
                 {
-
                 }
             }
             Thread.Sleep(1000);
@@ -239,7 +211,6 @@ namespace UnitTests
                 }
                 catch
                 {
-
                 }
             }
             Thread.Sleep(1000);
@@ -254,7 +225,6 @@ namespace UnitTests
                 }
                 catch
                 {
-
                 }
             }
             Thread.Sleep(1000);
@@ -268,50 +238,60 @@ namespace UnitTests
                 }
                 catch
                 {
-
                 }
             }
             Thread.Sleep(1000);
-            bool znaleziono = false;
+            bool found = false;
             while (true)
             {
                 try
                 {
-                    var lista = driver.FindElement(By.XPath("/html/body/div/main/ul"));
-                    var lis = lista.FindElements(By.TagName("li"));
-                    for (int i = 0; i < lis.Count; i++)
+                    var tbody = driver.FindElement(By.XPath("/html/body/div/main/table/tbody"));
+                    var trs = tbody.FindElements(By.TagName("tr"));
+                    for (int i = 1; i < trs.Count; i++)
                     {
-                        if (lis[i].Text == name)
+                        var td = trs[i].FindElement(By.TagName("td"));
+                        var a = td.FindElement(By.TagName("a"));
+                        if (a.Text == name)
                         {
-                            lista = driver.FindElement(By.XPath("/html/body/div/main/ul"));
-                            lis = lista.FindElements(By.TagName("li"));
-                            var a = lis[i].FindElement(By.TagName("a"));
-                            a.Click();
-                            Thread.Sleep(1000);
-                            znaleziono = true;
+                            found = true;
                             break;
                         }
                     }
-                    if (znaleziono) break;
+                    //var list = driver.FindElement(By.XPath("/html/body/div/main/ul"));
+                    //var lis = list.FindElements(By.TagName("li"));
+                    //for (int i = 0; i < lis.Count; i++)
+                    //{
+                    //    if (lis[i].Text == name)
+                    //    {
+                    //        list = driver.FindElement(By.XPath("/html/body/div/main/ul"));
+                    //        lis = list.FindElements(By.TagName("li"));
+                    //        var a = lis[i].FindElement(By.TagName("a"));
+                    //        a.Click();
+                    //        Thread.Sleep(1000);
+                    //        found = true;
+                    //        break;
+                    //    }
+                    //}
+                    if (found)
+                        break;
                 }
                 catch
                 {
-
                 }
             }
             Thread.Sleep(5000);
         }
-        //create new job offer test
+        
         [Fact]
         public void CreateNewJobOfferTest()
         {
-            //dane
             var jobTitleT = "ASP .NET MVC Developer";
             var companyT = "Marta Company";
             var locationT = "Warsaw";
             var salaryT = "4000";
-            var descriptionT = "Best job ever";
-            //
+            var descriptionT = "Description..";
+            
             var executor = driver as IJavaScriptExecutor;
             driver.Navigate().GoToUrl("https://localhost:5001");
             Assert.Contains("Welcome", driver.PageSource);
@@ -327,7 +307,6 @@ namespace UnitTests
                 }
                 catch
                 {
-
                 }
             }
             Thread.Sleep(1000);
@@ -341,7 +320,6 @@ namespace UnitTests
                 }
                 catch
                 {
-
                 }
             }
             while (true)
@@ -361,8 +339,6 @@ namespace UnitTests
                             el.Click();
                         }
                     }
-                    //var optionAla = driver.FindElement(By.XPath("/html/body/div/main/div/div/form/div[2]/select/option[4]"));
-                    //optionAla.Click();
                     Thread.Sleep(1000);
                     var location = driver.FindElement(By.XPath("/html/body/div/main/div/div/form/div[3]/input"));
                     location.Click();
@@ -384,7 +360,6 @@ namespace UnitTests
                 }
                 catch
                 {
-
                 }
             }
             while (true)
@@ -397,22 +372,19 @@ namespace UnitTests
                 }
                 catch
                 {
-
                 }
             }
 
 
             Thread.Sleep(2000);
-            //jesli sie dodalo to klikamy w ostatnia strone pagingu offers i w offer
-            //superflaga 0 - nie znaleziono, 1 - znaleziono, 2 - szukaj dalej
-            int superFlaga = 0;
+            int flag = 0;
             while (true)
             {
                 try
                 {
-                    var pasek = driver.FindElement(By.XPath("/html/body/div/main/div/table/tr[2]/td"));
-                    var spany = pasek.FindElements(By.TagName("span"));
-                    for (int i = 0; i < spany.Count; i++)
+                    var bar = driver.FindElement(By.XPath("/html/body/div/main/div/table/tr[2]/td"));
+                    var spans = bar.FindElements(By.TagName("span"));
+                    for (int i = 0; i < spans.Count; i++)
                     {
                         while (true)
                         {
@@ -422,47 +394,40 @@ namespace UnitTests
                                 if (jobT.Text == jobTitleT)
                                 {
                                     jobT.Click();
-                                    //sprawdzamy czy wszystkie dane sie zgadzaja 
-                                    var sprawdzenie = SprawdzamyDane(driver, jobTitleT, companyT, locationT, salaryT, descriptionT);
+                                    var check = CheckData(driver, jobTitleT, companyT, locationT, salaryT, descriptionT);
 
-                                    if (sprawdzenie) superFlaga = 1;
+                                    if (check) flag = 1;
+                                    else flag = 2;
 
-                                    else superFlaga = 2;
-                                    //wracamy do wszsytkich jobOffers
-                                    if (superFlaga != 1) driver.FindElement(By.XPath("/html/body/div/main/a")).Click();
+                                    if (flag != 1)
+                                        driver.FindElement(By.XPath("/html/body/div/main/a")).Click();
                                     break;
                                 }
                                 else
                                 {
-                                    pasek = driver.FindElement(By.XPath("/html/body/div/main/div/table/tr[2]/td"));
-                                    spany = pasek.FindElements(By.TagName("span"));
-                                    var nastepny = spany[(i + 1) % spany.Count];
-                                    if (i != spany.Count - 1) nastepny.Click();
+                                    bar = driver.FindElement(By.XPath("/html/body/div/main/div/table/tr[2]/td"));
+                                    spans = bar.FindElements(By.TagName("span"));
+                                    var next = spans[(i + 1) % spans.Count];
+                                    if (i != spans.Count - 1) next.Click();
 
                                 }
                             }
                             catch
                             {
-
                             }
-                            //if (superFlaga == 2)
-                            //    break;
                         }
-                        if (superFlaga == 1)
+                        if (flag == 1)
                             break;
                     }
-                    if (superFlaga == 1)
+                    if (flag == 1)
                         break;
                 }
                 catch
                 {
-
                 }
             }
             Thread.Sleep(5000);
-            //wracamy do wszsytkich jobOffers
             driver.FindElement(By.XPath("/html/body/div/main/a")).Click();
-            //Console.WriteLine(driver.PageSource);
         }
     }
 }

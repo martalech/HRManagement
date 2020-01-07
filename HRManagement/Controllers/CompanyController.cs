@@ -48,7 +48,7 @@ namespace HRManagement.Controllers
         [HttpGet]
         public async Task<IActionResult> Details(int id)
         {
-            return View(await _context.Companies.FirstOrDefaultAsync(o => o.Id == id));
+            return View(await _context.Companies.FirstOrDefaultAsync(o => o.Id == id).ConfigureAwait(false));
         }
 
         /// <summary>
@@ -87,8 +87,8 @@ namespace HRManagement.Controllers
             {
                 return View(model);
             }
-            await _context.Companies.AddAsync(model);
-            await _context.SaveChangesAsync();
+            await _context.Companies.AddAsync(model).ConfigureAwait(false);
+            await _context.SaveChangesAsync().ConfigureAwait(false);
             return RedirectToAction("Index");
         }
 
@@ -109,7 +109,7 @@ namespace HRManagement.Controllers
             var company = await _context.Companies.FirstOrDefaultAsync(x => x.Id == model.Id);
             company.Name = model.Name;
             _context.Update(company);
-            await _context.SaveChangesAsync();
+            await _context.SaveChangesAsync().ConfigureAwait(false);
             return RedirectToAction("Details", new { id = model.Id });
         }
     }

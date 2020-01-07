@@ -61,29 +61,29 @@ namespace HRManagement.Controllers
             {
                 return View(jobApplication);
             }
-            JobApplication newJobApp = new JobApplication();
-            newJobApp.ContactAgreement = jobApplication.ContactAgreement;
-            newJobApp.CvUrl = jobApplication.CvUrl;
-            newJobApp.EmailAddress = jobApplication.EmailAddress;
-            newJobApp.FirstName = jobApplication.FirstName;
-            newJobApp.LastName = jobApplication.LastName;
-            newJobApp.PhoneNumber = jobApplication.PhoneNumber;
-            newJobApp.JobOfferId = jobApplication.JobOfferId;
+            JobApplication newJobApplication = new JobApplication();
+            newJobApplication.ContactAgreement = jobApplication.ContactAgreement;
+            newJobApplication.CvUrl = jobApplication.CvUrl;
+            newJobApplication.EmailAddress = jobApplication.EmailAddress;
+            newJobApplication.FirstName = jobApplication.FirstName;
+            newJobApplication.LastName = jobApplication.LastName;
+            newJobApplication.PhoneNumber = jobApplication.PhoneNumber;
+            newJobApplication.JobOfferId = jobApplication.JobOfferId;
             var offer = _context.JobOffers.Include(x => x.JobApplications).FirstOrDefault(x => x.Id == jobApplication.JobOfferId);
-            offer.JobApplications.Add(newJobApp);
-            await _context.JobApplications.AddAsync(newJobApp);
-            await _context.SaveChangesAsync();
+            offer.JobApplications.Add(newJobApplication);
+            await _context.JobApplications.AddAsync(newJobApplication).ConfigureAwait(false);
+            await _context.SaveChangesAsync().ConfigureAwait(false);
 
             var msg = new SendGridMessage();
             msg.SetFrom(new EmailAddress("test@example.com", "Super Company Team"));
-            msg.AddTo(new EmailAddress(newJobApp.EmailAddress, newJobApp.FirstName + " " + newJobApp.LastName));
+            msg.AddTo(new EmailAddress(newJobApplication.EmailAddress, newJobApplication.FirstName + " " + newJobApplication.LastName));
             msg.SetSubject("Application sent, confirmation");
             msg.AddContent(MimeType.Text, "Hello, your application was sent correctly");
             //var apiKey = Configuration["DatabaseConnectionString"];
             var client = new SendGridClient(apiKey);
             var resposne = await client.SendEmailAsync(msg);
 
-            return RedirectToAction("Details", "JobOffer", new { id = newJobApp.JobOfferId });
+            return RedirectToAction("Details", "JobOffer", new { id = newJobApplication.JobOfferId });
         }
     }   
 }

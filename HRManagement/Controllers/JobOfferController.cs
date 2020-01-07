@@ -30,7 +30,7 @@ namespace HRManagement.Controllers
         [HttpGet]
         public async Task<IActionResult> Details(int id)
         {
-            return View(await _context.JobOffers.Include(x => x.CompanyName).Include(x => x.JobApplications).FirstOrDefaultAsync(o => o.Id == id));
+            return View(await _context.JobOffers.Include(x => x.CompanyName).Include(x => x.JobApplications).FirstOrDefaultAsync(o => o.Id == id).ConfigureAwait(false));
         }
 
 
@@ -75,8 +75,6 @@ namespace HRManagement.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Create(JobOffer model)
         {
-            model.CompanyName = _context.Companies.FirstOrDefault(x => x.Id == model.CompanyName.Id);
-            model.CompanyNameId = model.CompanyName.Id;
             ViewBag.Companies = _context.Companies.ToList();
             if (string.IsNullOrWhiteSpace(model.JobTitle))
             {
@@ -90,10 +88,20 @@ namespace HRManagement.Controllers
             {
                 ModelState.AddModelError("ContractType", "Job location cannot be empty");
             }
+            if (model.Salary < 0)
+            {
+                ModelState.AddModelError("Salary", "Salary cannot be negative");
+            }
+            if (model.CompanyName is null || (!(model.CompanyName is null) && model.CompanyNameId == 0))
+            {
+                ModelState.AddModelError("CompanyName", "Company cannot be left empty");
+            }
             if (!ModelState.IsValid)
             {
                 return View(model);
             }
+            model.CompanyName = _context.Companies.FirstOrDefault(x => x.Id == model.CompanyName.Id);
+            model.CompanyNameId = model.CompanyName.Id;
 
             await _context.JobOffers.AddAsync(model);
             await _context.SaveChangesAsync();
@@ -117,7 +125,7 @@ namespace HRManagement.Controllers
             offer.Salary = model.Salary;
             offer.ContractType = model.ContractType;
             _context.Update(offer);
-            await _context.SaveChangesAsync();
+            await _context.SaveChangesAsync().ConfigureAwait(false);
             return RedirectToAction("Details", new { id = model.Id });
         }
 
@@ -129,10 +137,10 @@ namespace HRManagement.Controllers
             {
                 return BadRequest($"id should not be null");
             }
-            var jobapps = await _context.JobApplications.ToListAsync();
+            var jobapps = await _context.JobApplications.ToListAsync().ConfigureAwait(false);
             jobapps.RemoveAll(x => x.JobOfferId == idd);
             _context.JobOffers.Remove(new JobOffer() { Id = idd.Value });
-            await _context.SaveChangesAsync();
+            await _context.SaveChangesAsync().ConfigureAwait(false);
             return RedirectToAction("Index");
         }
     }
