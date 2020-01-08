@@ -11,7 +11,7 @@ namespace HRManagement.Models
     /// </summary>
     public class JobApplication
     {
-
+        [Key]
         public int Id { get; set; }
         public virtual int JobOfferId { get; set; }
         [Required]

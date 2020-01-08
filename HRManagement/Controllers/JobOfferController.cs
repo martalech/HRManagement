@@ -65,15 +65,14 @@ namespace HRManagement.Controllers
         [HttpGet]
         public IActionResult Create()
         {
-            var jobOffer = new JobOffer();
-            jobOffer.JobApplications = new List<JobApplication>();
+            var jobOfferCreate = new JobOfferCreate();
             ViewBag.Companies = _context.Companies.ToList();
-            return View(jobOffer);
+            return View(jobOfferCreate);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create(JobOffer model)
+        public async Task<ActionResult> Create(JobOfferCreate model)
         {
             ViewBag.Companies = _context.Companies.ToList();
             if (string.IsNullOrWhiteSpace(model.JobTitle))
@@ -92,7 +91,7 @@ namespace HRManagement.Controllers
             {
                 ModelState.AddModelError("Salary", "Salary cannot be negative");
             }
-            if (model.CompanyName is null || (!(model.CompanyName is null) && model.CompanyNameId == 0))
+            if (model.CompanyName is null || (!(model.CompanyName is null) && model.CompanyName.Id == 0))
             {
                 ModelState.AddModelError("CompanyName", "Company cannot be left empty");
             }
@@ -100,10 +99,16 @@ namespace HRManagement.Controllers
             {
                 return View(model);
             }
-            model.CompanyName = _context.Companies.FirstOrDefault(x => x.Id == model.CompanyName.Id);
-            model.CompanyNameId = model.CompanyName.Id;
+            var newJobOffer = new JobOffer();
+            newJobOffer.ContractType = model.ContractType;
+            newJobOffer.Description = model.Description;
+            newJobOffer.JobApplications = new List<JobApplication>();
+            newJobOffer.JobTitle = model.JobTitle;
+            newJobOffer.Location = model.Location;
+            newJobOffer.CompanyName = _context.Companies.FirstOrDefault(x => x.Id == model.CompanyName.Id);
+            newJobOffer.CompanyNameId = model.CompanyName.Id;
 
-            await _context.JobOffers.AddAsync(model);
+            await _context.JobOffers.AddAsync(newJobOffer);
             await _context.SaveChangesAsync();
             return RedirectToAction("Index");
         }

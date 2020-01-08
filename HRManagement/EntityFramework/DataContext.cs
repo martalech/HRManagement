@@ -16,6 +16,9 @@ namespace HRManagement.EntityFramework
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<Company>().Property(c => c.Id).ValueGeneratedOnAdd();
+            modelBuilder.Entity<Company>().HasIndex(c => c.Id);
+
             modelBuilder.Entity<Company>().HasData(new Company { Id = 1, Name = "Marta Company" });
 
             modelBuilder.Entity<JobOffer>().HasData(
